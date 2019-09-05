@@ -1,1 +1,2 @@
-# LocationJustIn-Android-App
+# LocationJustIn-Android-App 
+## That based on the GPS location service. 
