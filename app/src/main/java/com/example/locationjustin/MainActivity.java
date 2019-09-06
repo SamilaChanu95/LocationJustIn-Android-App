@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationServices;
 
 //using the google api service must implement this interfaces
@@ -61,6 +62,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         //check the permission as if user give the permission (permission was granted)
         if(permissionCheck == PackageManager.PERMISSION_GRANTED){
+
+            //get the google's FusedLocation API
+            FusedLocationProviderApi fusedLocationProviderApi = LocationServices.FusedLocationApi;
+
+            location = fusedLocationProviderApi.getLastLocation(googleApiClient);
+
+            if(location != null){
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+
+                txtLocation.setText(latitude + ", "+longitude);
+            }else{
+                txtLocation.setText("The app is not able to access the location now.Try again later.");
+            }
 
         }
         //permission denied
