@@ -1,7 +1,12 @@
 package com.example.locationjustin;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -46,5 +51,25 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
+    }
+
+    //custom method
+    private void showTheUserLocation(){
+
+        //permission initialize in to variable
+        int permissionCheck = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        //check the permission as if user give the permission (permission was granted)
+        if(permissionCheck == PackageManager.PERMISSION_GRANTED){
+
+        }
+        //permission denied
+        else{
+
+            txtLocation.setText("This app not allowed to access the location");
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},1);
+
+            ActivityCompat.requestPermissions();
+        }
     }
 }
