@@ -9,7 +9,10 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.media.MediaBrowserCompat;
+import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,16 +45,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onConnected(Bundle bundle) {
 
+        Log.d(TAG, "We are connected to the user's location.");
+        showTheUserLocation();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
 
+        Log.d(TAG, "The connection is suspected.");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d(TAG,"Connection is failed.");
 
+        if(ConnectionResult.hasResolution()) {
+            try {
+                connectionResult.startResolutionForResult(MainActivity.this, REQUEST_CODE);
+            } catch (Exception e) {
+                Log.d(TAG, e.getStackTrace().toString());
+            }
+        }
+        else {
+            Toast.makeText(MainActivity.this, "GooglePlay Services is not working. Exit!",Toast.LENGTH_LONG).show();
+            finish(); // close this activity
+        }
     }
 
     //custom method
@@ -83,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
             txtLocation.setText("This app not allowed to access the location");
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},1);
-
+            // 1 is the request code
             ActivityCompat.requestPermissions();
         }
     }
