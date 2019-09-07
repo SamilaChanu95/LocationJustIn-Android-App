@@ -3,9 +3,15 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorG3</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:typeface">sans</item>
+        <item name="actionBarSize">65sp</item>
+        <item name="editTextColor">@color/colorG1</item>
+        <item name="android:fontFamily">@font/schoolbell</item>
+        <item name="android:textSize">30sp</item>
+        <item name="colorPrimaryDark">@color/colorG1</item>
+        <item name="colorAccent">@color/colorG3</item>
+        <item name="colorBackgroundFloating">@color/colorG2</item>
     </style>
-
 </resources>
