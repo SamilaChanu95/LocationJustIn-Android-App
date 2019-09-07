@@ -1,11 +1,13 @@
 package com.example.locationjustin;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -26,15 +28,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static final int REQUEST_CODE = 1000;
 
     private GoogleApiClient googleApiClient;
-    private Location location;
-    private TextView txtLocation;
+    //private Location location;
+   // private TextView txtLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        txtLocation = (TextView) findViewById(R.id.txtLocation);
+        //txtLocation = (TextView) findViewById(R.id.txtLocation);
 
         googleApiClient = new GoogleApiClient.Builder(MainActivity.this)
                 .addConnectionCallbacks(MainActivity.this)
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onConnected(Bundle bundle) {
 
         Log.d(TAG, "We are connected to the user's location.");
-        showTheUserLocation();
+        //showTheUserLocation();
     }
 
     @Override
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.d(TAG,"Connection is failed.");
 
-        if(ConnectionResult.hasResolution()) {
+        if(connectionResult.hasResolution()) {
             try {
                 connectionResult.startResolutionForResult(MainActivity.this, REQUEST_CODE);
             } catch (Exception e) {
@@ -72,6 +74,26 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE && requestCode == RESULT_OK) {
+
+            googleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(googleApiClient != null) {
+
+            googleApiClient.connect();
+        }
+    }
+/*
     //custom method
     private void showTheUserLocation(){
 
@@ -90,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
 
+                //return the latitude and longitude
                 txtLocation.setText(latitude + ", "+longitude);
             }else{
                 txtLocation.setText("The app is not able to access the location now.Try again later.");
@@ -102,7 +125,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             txtLocation.setText("This app not allowed to access the location");
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},1);
             // 1 is the request code
-            ActivityCompat.requestPermissions();
+            //ActivityCompat.requestPermissions();
         }
-    }
+    }*/
 }
+
