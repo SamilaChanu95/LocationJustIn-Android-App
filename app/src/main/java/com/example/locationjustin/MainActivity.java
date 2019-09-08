@@ -7,12 +7,16 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.media.MediaBrowserCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,8 +25,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationServices;
 
+import org.w3c.dom.Text;
+
 //using the google api service must implement this interfaces
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener{
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
 
     public static final String TAG = "TAG";
     private static final int REQUEST_CODE = 1000;
@@ -31,6 +37,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     //private Location location;
    // private TextView txtLocation;
 
+    EditText edtAddress;
+    EditText edtMilesPerHour;
+    EditText edtMetersPerMile;
+    TextView txtDistanceValue;
+    TextView txtTime;
+    Button btnGetTheData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +51,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         //txtLocation = (TextView) findViewById(R.id.txtLocation);
 
+        edtAddress = (EditText) findViewById(R.id.edtAddress);
+        edtMilesPerHour = (EditText) findViewById(R.id.edtMilesPerHour);
+        edtMetersPerMile = (EditText) findViewById(R.id.edtMetersPerMile);
+        txtTime = (TextView) findViewById(R.id.txtTime);
+        txtDistanceValue = (TextView) findViewById(R.id.txtDistanceValue);
+        btnGetTheData = (Button) findViewById(R.id.btnGetTheData);
+
+        btnGetTheData.setOnClickListener(MainActivity.this);
+
         googleApiClient = new GoogleApiClient.Builder(MainActivity.this)
                 .addConnectionCallbacks(MainActivity.this)
                 .addOnConnectionFailedListener(MainActivity.this)
                 .addApi(LocationServices.API).build();
      }
+
+
 
     @Override
     public void onConnected(Bundle bundle) {
