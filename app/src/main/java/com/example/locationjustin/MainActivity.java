@@ -84,6 +84,56 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         String addressValue = edtAddress.getText().toString();
         boolean isGeoCoding = true;// that convert the latitude and Longitude to an actual address
 
+        if(!addressValue.equals(destinationLocationAddress))
+        {
+            addressValue = destinationLocationAddress;
+            Geocoder geocoder = new Geocoder(getApplicationContext());
+
+            try {
+
+                List<Address> myAddresses =
+                        geocoder.getFromLocationName(destinationLocationAddress, 4);
+
+                if(myAddresses != null) {
+
+                    double latitude = myAddresses.get(0).getLatitude();
+                    double longitude = myAddresses.get(0).getLongitude();
+
+                    Location locationAddress = new Location("MyDestination");
+                    locationAddress.setLatitude(latitude);
+                    locationAddress.setLongitude(longitude);
+
+                    taxiManager.setDestinationLocation(locationAddress);
+
+                }
+
+            } catch (Exception e) {
+
+                isGeoCoding = false;
+
+                e.printStackTrace();
+
+            }
+        }
+
+        int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        if(permissionCheck == PackageManager.PERMISSION_GRANTED) {
+
+            FusedLocationProviderApi fusedLocationProviderApi = LocationServices.FusedLocationApi;
+            Location userCurrentLocation = fusedLocationProviderApi.getLastLocation(googleApiClient);
+            if(userCurrentLocation != null && isGeoCoding) {
+
+                txtDistanceValue.setText(taxiManager.returnTheMilesBetweenCurrentLocationAndDestinationLocation(userCurrentLocation, Integer.parseInt(edtMetersPerMile.getText().toString())));
+                txtTime.setText(taxiManager.returnTheTimeLeftToGetToDestinationLocation(userCurrentLocation, Float.parseFloat(edtMilesPerHour.getText().toString()), Integer.parseInt(edtMetersPerMile.getText().toString())));
+            }
+
+        } else {
+
+            txtDistanceValue.setText("This App is not allowed to access the location.");
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+
+        }
     }
 
     @Override
