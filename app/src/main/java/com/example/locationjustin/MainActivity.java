@@ -14,6 +14,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.renderscript.RenderScript;
 import android.support.v4.media.MediaBrowserCompat;
 import android.util.Log;
 import android.view.View;
@@ -25,14 +26,16 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import org.w3c.dom.Text;
 
 import java.util.List;
 
-//using the google api service must implement this interfaces
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
+//using the google api service must implement this interfaces                                                                *Implements this interfaces*
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,View.OnClickListener, LocationListener {
 
     public static final String TAG = "TAG";
     private static final int REQUEST_CODE = 1000;
@@ -86,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         if(!addressValue.equals(destinationLocationAddress))
         {
-            addressValue = destinationLocationAddress;
+            destinationLocationAddress = addressValue;
+
             Geocoder geocoder = new Geocoder(getApplicationContext());
 
             try {
@@ -141,6 +145,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         Log.d(TAG, "We are connected to the user's location.");
         //showTheUserLocation();
+
+        FusedLocationProviderApi fusedLocationProviderApi = LocationServices.FusedLocationApi;
+
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(10000); //every 10s location that updated
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        locationRequest.setSmallestDisplacement(5);
+
+        if(googleApiClient.isConnected()) {
+
+            fusedLocationProviderApi.requestLocationUpdates(googleApiClient, locationRequest,MainActivity.this);
+        }
+
     }
 
     @Override
