@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.media.MediaBrowserCompat;
@@ -26,6 +28,8 @@ import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationServices;
 
 import org.w3c.dom.Text;
+
+import java.util.List;
 
 //using the google api service must implement this interfaces
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
@@ -44,6 +48,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     TextView txtTime;
     Button btnGetTheData;
 
+    private String destinationLocationAddress = "";
+
+    //initialize the taxiManager variable
+    private TaxiManager taxiManager ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,13 +69,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         btnGetTheData.setOnClickListener(MainActivity.this);
 
+        //initialize the taxiManager variable
+        taxiManager = new TaxiManager();
+
         googleApiClient = new GoogleApiClient.Builder(MainActivity.this)
                 .addConnectionCallbacks(MainActivity.this)
                 .addOnConnectionFailedListener(MainActivity.this)
                 .addApi(LocationServices.API).build();
      }
 
+    @Override
+    public void onClick(View v) {
 
+        String addressValue = edtAddress.getText().toString();
+        boolean isGeoCoding = true;// that convert the latitude and Longitude to an actual address
+
+    }
 
     @Override
     public void onConnected(Bundle bundle) {
