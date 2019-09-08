@@ -82,6 +82,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
      }
 
     @Override
+    public void onLocationChanged(Location location) {
+
+        onClick(null);
+
+    }
+
+    @Override
     public void onClick(View v) {
 
         String addressValue = edtAddress.getText().toString();
@@ -156,6 +163,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if(googleApiClient.isConnected()) {
 
             fusedLocationProviderApi.requestLocationUpdates(googleApiClient, locationRequest,MainActivity.this);
+
+        } else {
+
+            googleApiClient.connect();
+
         }
 
     }
