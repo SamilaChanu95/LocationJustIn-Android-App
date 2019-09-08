@@ -89,6 +89,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        FusedLocationProviderApi fusedLocationProviderApi = LocationServices.FusedLocationApi;
+        fusedLocationProviderApi.removeLocationUpdates(googleApiClient, MainActivity.this);
+    }
+
+    @Override
     public void onClick(View v) {
 
         String addressValue = edtAddress.getText().toString();
