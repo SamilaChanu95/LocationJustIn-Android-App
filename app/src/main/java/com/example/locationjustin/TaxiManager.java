@@ -34,8 +34,48 @@ public class TaxiManager {
             return miles + "Miles.";
         } else {
 
-            return "No Miles."
+            return "No Miles.";
         }
+    }
+
+    //get the time by distanceInMeters and milesPerHour and metersPerMile
+    public String returnTheTimeLeftToGetToDestinationLocation(Location currentLocation, float milesPerHour, float metersPerMile) {
+
+        float distanceInMeters = returnTheDistanceToDestinationLocationInMeters(currentLocation);
+        float timeLeft = distanceInMeters / ((milesPerHour) * (metersPerMile));
+
+        String timeResult = "";
+
+        int timeLeftInHours = (int) timeLeft;
+
+        if(timeLeftInHours == 1)
+        {
+            timeResult = timeResult + "1 Hour " ;
+        }
+        else if(timeLeftInHours > 1)
+        {
+            timeResult = timeResult + timeLeftInHours +" Hours " ;
+        }
+
+        int minutesLeft = (int) ((timeLeft - timeLeftInHours) * 60);
+
+        if(minutesLeft == 1) {
+
+            timeResult = timeResult + "1 Minute ";
+        }
+
+        else if(minutesLeft > 1) {
+
+            timeResult = timeResult + minutesLeft + " Minutes ";
+        }
+
+        if(timeLeftInHours <= 0 && minutesLeft <= 0) {
+
+            timeResult = "Less than a minute is left to get the destination location.";
+        }
+
+        return  timeResult;
+
     }
 
 }
